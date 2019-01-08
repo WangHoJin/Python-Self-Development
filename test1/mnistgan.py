@@ -12,6 +12,7 @@ n_hidden = 256
 n_input = 28 * 28
 n_noise = 128
 
+
 X = tf.placeholder(tf.float32, [None, n_input])
 Z = tf.placeholder(tf.float32, [None, n_noise])
 
