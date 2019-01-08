@@ -12,15 +12,17 @@ n_hidden = 256
 n_input = 28 * 28
 n_noise = 128
 
-
+# X : 실제이미지, Z : 랜덤노이즈
 X = tf.placeholder(tf.float32, [None, n_input])
 Z = tf.placeholder(tf.float32, [None, n_noise])
 
+# 생성기(Genarator)
 G_W1 = tf.Variable(tf.random_normal([n_noise, n_hidden], stddev=0.01))
 G_b1 = tf.Variable(tf.zeros([n_hidden]))
 G_W2 = tf.Variable(tf.random_normal([n_hidden, n_input], stddev=0.01))
 G_b2 = tf.Variable(tf.zeros([n_input]))
 
+# 분류기(Discriminator)
 D_W1 = tf.Variable(tf.random_normal([n_input, n_hidden], stddev=0.01))
 D_b1 = tf.Variable(tf.zeros([n_hidden]))
 D_W2 = tf.Variable(tf.random_normal([n_hidden, 1], stddev=0.01))
@@ -38,25 +40,25 @@ def discriminator(inputs):
     output = tf.nn.sigmoid(tf.matmul(hidden, D_W2) + D_b2)
     return output
 
-
+# 랜덤 노이즈 생성기
 def get_noise(batch_size, n_noise):
     return np.random.normal(size=(batch_size, n_noise))
 
 
 G = generator(Z)
-D_gene = discriminator(G)
+D_fake = discriminator(G)
 D_real = discriminator(X)
 
-loss_D = tf.reduce_mean(tf.log(D_real) + tf.log(1 - D_gene))
-loss_G = tf.reduce_mean(tf.log(D_gene))
+# loss_D, loss_G 둘다 높을수록 좋다.
+# loss_D : 얼마나 분류를 잘하는가, loss_G : 얼마나 진짜 같은가
+loss_D = tf.reduce_mean(tf.log(D_real) + tf.log(1 - D_fake))
+loss_G = tf.reduce_mean(tf.log(D_fake))
 
 D_var_list = [D_W1, D_b1, D_W2, D_b2]
 G_var_list = [G_W1, G_b1, G_W2, G_b2]
 
-train_D = tf.train.AdamOptimizer(learning_rate).minimize(-loss_D,
-                                                         var_list=D_var_list)
-train_G = tf.train.AdamOptimizer(learning_rate).minimize(-loss_G,
-                                                         var_list=G_var_list)
+train_D = tf.train.AdamOptimizer(learning_rate).minimize(-loss_D, var_list=D_var_list)
+train_G = tf.train.AdamOptimizer(learning_rate).minimize(-loss_G, var_list=G_var_list)
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
