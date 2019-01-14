@@ -1,0 +1,12 @@
+test1
+======================================
+.. automodule:: test1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Sphinx_LiveTest
+---------------
+.. automodule:: test1.Sphinx_LiveTest
+    :members:

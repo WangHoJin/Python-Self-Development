@@ -1,63 +1,44 @@
 """
-    TEST2
-    ~~~~~
+    SphinxTest
+    ~~~~~~~~~~
 """
-import numpy as np
 
-# 신경망 함수
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+class Test(object):
+    """두 개의 int 값을 입력받아 다양한 연산을 할 수 있도록 하는 클래스.
 
-def identity(x):
+    :param int a: a 값
+    :param int b: b 값
     """
 
-    :param x:
-    :return:
-    """
-    return x
+    def __init__(self, a, b):
+        self._a = a
+        self._b = b
 
-def init_network():
-    """
+    def is_same(self):
+        """미리 입력받은 a와 b값이 같은지 확인하여 결과를 반환합니다.
 
-    :return:
-    """
+        :return: boolean True or False에 대한 결과, a와 b가 값으면 True, 다르면 False
 
-    network = {}
-    network['W1'] = np.array([[1, 3, 5], [2, 4, 6]])  # weight 은 관습적으로 W라고 합니다.
-    network['W2'] = np.array([[1, 2], [3, 4], [5, 6]])
-    network['W3'] = np.array([[1, 2], [3, 4]])
-    return network
+        예제:
+            다음과 같이 사용하세요:
 
+            >>> Test(1, 2).is_same()
+            False
 
-# 신경망 구현
-def forward(network, x):
-    """미리 입력받은 a와 b값이 같은지 확인하여 결과를 반환합니다.
+        """
+        return self._a == self._b
 
-           :return: boolean True or False에 대한 결과, a와 b가 값으면 True, 다르면 False
+    def plus(self):
+        """미리 입력받은 a와 b값을 더한 결과를 반환합니다.
 
-           예제:
-               다음과 같이 사용하세요:
+        :returns: int a + b에 대한 결과
 
-               >>> Test(1, 2).is_same()
-               False
+        예제:
+            다음과 같이 사용하세요:
 
-           """
-    W1, W2, W3 = network['W1'], network['W2'], network['W3']
-
-    y = np.dot(x, W1)
-    y_hat = sigmoid(y)
-    k = np.dot(y_hat, W2)
-    k_hat = sigmoid(k)
-    j = np.dot(k_hat, W3)
-    j_hat = identity(j)
-    """identity 대신 softmax함수를 사용할 수 있습니다."""
-    return j_hat
-
-network = init_network()
-
-x = np.array([1, 2])
+            >>> Test(2, 1).plus()
+            3
 
 
-"""입력"""
-y = forward(network, x)  # 출력
-print(y)
+        """
+        return self._a + self._b

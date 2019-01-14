@@ -1,0 +1,13 @@
+tutorial
+======================================
+.. automodule:: test1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cnn
+---------
+.. automodule:: test1.test
+    :members:
+
+
