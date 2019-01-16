@@ -23,17 +23,38 @@ Welcome to SphinxTest's documentation!
 # Bold
 **굶은 글씨로 나옵니다.**
 
+#backquotes
+``코드샘플용``
+
 1. 목록입니다.
 2. 목록입니다.
 #. 목록입니다.
 
 항목1
+
     항목1의 정의 입니다.
     항목1의 정의
 
 항목2
     항목2의 정의 입니다.
     항목2의 정의
+
+'|' : 줄 바꿈 보존
+| These lines are
+| broken exactly like in
+| the source file.
+
+This is a normal text paragraph. The next paragraph is a code sample::
+
+   It is not processed in any way, except
+   that the indentation is removed.
+
+   It can span multiple lines.
+
+This is a normal text paragraph again.
+
+>>> 1 + 1
+2
 
 -a          옵션 a 설명
 -b file     옵션 b 설명

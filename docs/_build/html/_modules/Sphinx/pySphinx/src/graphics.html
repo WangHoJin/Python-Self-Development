@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sphinx.pySphinx.src.graphics &mdash; SphinxTest 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> SphinxTest
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../test1.html">test1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../test2.html">test2</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SphinxTest</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>Sphinx.pySphinx.src.graphics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Sphinx.pySphinx.src.graphics</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot; Sphinx &quot;&quot;&quot;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">by Jeongwon Lee</span>
+
+<span class="sd">v0.2</span>
+<span class="sd">2018.10.17 0:00~3:00am 프로토타입 완성</span>
+<span class="sd">2018.10.17 10:00~10:30am 스핑크스 데이터 적용 및 이미지 리사이징, BLOCK 0 먼저 그리고 BLOCK 1 나중에 그리도록 수정</span>
+<span class="sd">2018.10.17 5:00~6:00pm ESC 누르면 종료. ALT 키 누르면 erase 모드</span>
+<span class="sd">2018.10.17 11:30pm~2:00am 주석, TODO, BLOCK ROW/COL 조정해서 반응속도 향상, GRID를 마우스 주변만 보여주기, SHIFT 누르면 확장 BLOCK 선택</span>
+
+<span class="sd">v0.3</span>
+<span class="sd">2018.10.18 9:30~11:30am SphinxAnn  </span>
+<span class="sd">https://stackoverflow.com/questions/28282434/how-to-combine-opencv-with-pyqt-to-create-a-simple-gui</span>
+
+<span class="sd">v0.31</span>
+<span class="sd">2018.10.20 8:00~11:00am </span>
+<span class="sd">2018.10.23 1:30~3:00pm PyQt에서 구현</span>
+<span class="sd">2018.10.24 0:30~5:00am opencv 이벤트를 PyQt mouse, key 이벤트에서 구현, loadNextImage</span>
+<span class="sd">2018.10.24 10:30 C 키 누르면 grid 초기화</span>
+
+<span class="sd">2018.12.06 CMainWindow 도입. 기존 MyDialog(QDialog)은 QWidget 파생 클래스로 변경하여 central widget 처리</span>
+<span class="sd">           statusbar와 toolbar용 임시 아이콘 하나 추가</span>
+
+<span class="sd">2019.01.11 5:00pm~6:50pm sphinx.py에 main 함수 두고 graphics.py 분리           </span>
+<span class="sd">2019.01.12 SAT 8:00am~11:00am Graphics.py 레이아웃</span>
+<span class="sd">    - Label 배치</span>
+<span class="sd">    - 화면 크기를 얻어오기 위해서 구조 변경</span>
+<span class="sd">2019.01.12 SAT 1:00pm~4:00pm Graphics.py 레이아웃</span>
+<span class="sd">    - PhotoViewer 클래스로 변경</span>
+<span class="sd">2019.01.13 SUN 10:00am~1:00pm 클래스 </span>
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># https://stackoverflow.com/questions/35508711/how-to-enable-pan-and-zoom-in-a-qgraphicsview/35514531#35514531</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">--------------------------------------------------------------------------</span>
+<span class="sd">                                topLayout</span>
+<span class="sd">--------------------------------------------------------------------------</span>
+<span class="sd">        |</span>
+<span class="sd">        |</span>
+<span class="sd">        |                           PhotoViewer</span>
+<span class="sd">        |</span>
+<span class="sd">        |</span>
+<span class="sd">Side    |-----------------------------------------------------------------</span>
+<span class="sd">        |</span>
+<span class="sd">        |</span>
+<span class="sd">        |                           PhotoViewer</span>
+<span class="sd">        |</span>
+<span class="sd">        |</span>
+<span class="sd">--------------------------------------------------------------------------</span>
+<span class="sd">                                BottomLayout </span>
+<span class="sd">--------------------------------------------------------------------------</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtWidgets</span>
+
+
+<div class="viewcode-block" id="Graphics"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics">[docs]</a><span class="k">class</span> <span class="nc">Graphics</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Graphics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Sphinx&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupLayout</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Graphics.setupLayout"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.setupLayout">[docs]</a>    <span class="k">def</span> <span class="nf">setupLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        레이아웃 셋업</span>
+<span class="sd">        :return: adasdasd </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span> <span class="o">=</span> <span class="n">PhotoViewer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span> <span class="o">=</span> <span class="n">PhotoViewer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+        <span class="c1"># Button to change from drag/pan to getting pixel info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="o">.</span><span class="n">photoClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photoClicked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="o">.</span><span class="n">photoClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photoClicked</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPixInfo</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QToolButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPixInfo</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Pixel Info Mode&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPixInfo</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pixInfo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editPixInfo</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editPixInfo</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+
+        <span class="c1"># Component</span>
+        <span class="n">topMenuHeight</span> <span class="o">=</span> <span class="mi">80</span>
+        <span class="n">topMenuPadding</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+        <span class="n">btnTitle</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Load&#39;</span><span class="p">,</span> <span class="s1">&#39;Save&#39;</span><span class="p">,</span> <span class="s1">&#39;WW/WL&#39;</span><span class="p">,</span> <span class="s1">&#39;Panning&#39;</span><span class="p">,</span> <span class="s1">&#39;Zoom&#39;</span><span class="p">,</span> <span class="s1">&#39;Fit&#39;</span><span class="p">,</span> <span class="s1">&#39;ROI&#39;</span><span class="p">,</span> <span class="s1">&#39;Crop&#39;</span><span class="p">,</span> <span class="s1">&#39;Quit&#39;</span><span class="p">]</span>
+        <span class="n">btnFunction</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fnLoadImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnSaveImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnAdjustWL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnPanningImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnZoomImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnFitImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnDrawROI</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnCrop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fnQuitExe</span><span class="p">]</span>
+        <span class="n">btnNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">btnTitle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topMenu</span> <span class="o">=</span> <span class="n">RibbonMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topMenuHeight</span><span class="p">,</span> <span class="n">topMenuPadding</span><span class="p">,</span> <span class="n">btnNum</span><span class="p">,</span> <span class="n">btnTitle</span><span class="p">,</span> <span class="n">btnFunction</span><span class="p">)</span>
+
+        <span class="n">sidebarWidth</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sidebar</span> <span class="o">=</span> <span class="n">Sidebar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sidebarWidth</span><span class="p">)</span>
+
+
+        <span class="c1"># Layout</span>
+        <span class="n">topLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">topLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topMenu</span><span class="p">)</span>
+
+        <span class="n">leftLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">leftLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sidebar</span><span class="p">)</span>
+
+        <span class="n">rightLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">rightLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="p">)</span>
+        <span class="n">rightLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="p">)</span>
+
+        <span class="n">mainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">mainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">leftLayout</span><span class="p">)</span>
+        <span class="n">mainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">rightLayout</span><span class="p">)</span>
+        <span class="n">mainLayout</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="n">leftLayout</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mainLayout</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="n">rightLayout</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">bottomLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">bottomLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnPixInfo</span><span class="p">)</span>
+        <span class="n">bottomLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editPixInfo</span><span class="p">)</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">topLayout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">mainLayout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">bottomLayout</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Graphics.pixInfo"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.pixInfo">[docs]</a>    <span class="k">def</span> <span class="nf">pixInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴ</span>
+<span class="sd">        :return: </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="o">.</span><span class="n">toggleDragMode</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="o">.</span><span class="n">toggleDragMode</span><span class="p">()</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.photoClicked"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.photoClicked">[docs]</a>    <span class="k">def</span> <span class="nf">photoClicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        포스는 몰라 리턴도 몰라</span>
+<span class="sd">        :param pos: </span>
+<span class="sd">        :return: </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="o">.</span><span class="n">dragMode</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">NoDrag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">editPixInfo</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">, </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="o">.</span><span class="n">dragMode</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">NoDrag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">editPixInfo</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">, </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="Graphics.fnLoadImage"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnLoadImage">[docs]</a>    <span class="k">def</span> <span class="nf">fnLoadImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="o">.</span><span class="n">setPhoto</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">(</span><span class="s1">&#39;top.jpg&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="o">.</span><span class="n">setPhoto</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">(</span><span class="s1">&#39;side.jpg&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Graphics.fnSaveImage"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnSaveImage">[docs]</a>    <span class="k">def</span> <span class="nf">fnSaveImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.fnAdjustWL"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnAdjustWL">[docs]</a>    <span class="k">def</span> <span class="nf">fnAdjustWL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.fnPanningImage"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnPanningImage">[docs]</a>    <span class="k">def</span> <span class="nf">fnPanningImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.fnZoomImage"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnZoomImage">[docs]</a>    <span class="k">def</span> <span class="nf">fnZoomImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.fnFitImage"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnFitImage">[docs]</a>    <span class="k">def</span> <span class="nf">fnFitImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer1</span><span class="o">.</span><span class="n">fitInView</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewer2</span><span class="o">.</span><span class="n">fitInView</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sidebar</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span><span class="n">fitInView</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Graphics.fnDrawROI"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnDrawROI">[docs]</a>    <span class="k">def</span> <span class="nf">fnDrawROI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Graphics.fnCrop"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnCrop">[docs]</a>    <span class="k">def</span> <span class="nf">fnCrop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Graphics.fnQuitExe"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Graphics.fnQuitExe">[docs]</a>    <span class="k">def</span> <span class="nf">fnQuitExe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div></div>
+
+
+
+<div class="viewcode-block" id="RibbonMenu"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.RibbonMenu">[docs]</a><span class="k">class</span> <span class="nc">RibbonMenu</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">btnNum</span><span class="p">,</span> <span class="n">btnTitle</span><span class="p">,</span> <span class="n">btnFunction</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RibbonMenu</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background-color:rgb(147,147,147); border-color: black; border: 1px;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+
+        <span class="n">btnHeight</span> <span class="o">=</span> <span class="n">height</span> <span class="o">-</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">btnWidth</span> <span class="o">=</span> <span class="n">btnHeight</span>
+        <span class="n">btnList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">btnNum</span><span class="p">):</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">btnTitle</span><span class="p">):</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">btnTitle</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">btnFunction</span><span class="p">):</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">btnFunction</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRect</span><span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">btnWidth</span><span class="o">+</span><span class="n">padding</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background-color:rgb(211,211,211); border: 1px white; border-radius: 5px;&quot;</span><span class="p">)</span>
+            <span class="n">btnList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="Sidebar"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Sidebar">[docs]</a><span class="k">class</span> <span class="nc">Sidebar</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sidebar</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUI</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sidebar.setupUI"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.Sidebar.setupUI">[docs]</a>    <span class="k">def</span> <span class="nf">setupUI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background-color:rgb(177,177,177); border: 1px&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+
+        <span class="n">sidebarTitle</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;Sidebar&quot;</span><span class="p">)</span>
+        <span class="n">sidebarTitle</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">sidebarTitle</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="n">editID</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;Filename&quot;</span><span class="p">)</span>
+        <span class="n">editManifest</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTextEdit</span><span class="p">(</span><span class="s2">&quot;Manifest Data&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span> <span class="o">=</span> <span class="n">PhotoViewer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span><span class="n">setMaximumHeight</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span><span class="n">setPhoto</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">(</span><span class="s1">&#39;side.jpg&#39;</span><span class="p">))</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sidebarTitle</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">editID</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">editManifest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div></div>
+
+
+
+
+<div class="viewcode-block" id="PhotoViewer"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer">[docs]</a><span class="k">class</span> <span class="nc">PhotoViewer</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    이건 우리 아들</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">photoClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPoint</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PhotoViewer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUI</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PhotoViewer.setupUI"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.setupUI">[docs]</a>    <span class="k">def</span> <span class="nf">setupUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsScene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_photo</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsPixmapItem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setScene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setTransformationAnchor</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">AnchorUnderMouse</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setResizeAnchor</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">AnchorUnderMouse</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setHorizontalScrollBarPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setBackgroundBrush</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhotoViewer.hasPhoto"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.hasPhoto">[docs]</a>    <span class="k">def</span> <span class="nf">hasPhoto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span></div>
+
+<div class="viewcode-block" id="PhotoViewer.fitInView"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.fitInView">[docs]</a>    <span class="k">def</span> <span class="nf">fitInView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param scale:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="o">.</span><span class="n">pixmap</span><span class="p">()</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rect</span><span class="o">.</span><span class="n">isNull</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setSceneRect</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasPhoto</span><span class="p">():</span>
+                <span class="n">unity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span><span class="o">.</span><span class="n">mapRect</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">unity</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">unity</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+                <span class="n">viewrect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">rect</span><span class="p">()</span>
+                <span class="n">scenerect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span><span class="o">.</span><span class="n">mapRect</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">viewrect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">/</span> <span class="n">scenerect</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span>
+                             <span class="n">viewrect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">/</span> <span class="n">scenerect</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">factor</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="PhotoViewer.setPhoto"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.setPhoto">[docs]</a>    <span class="k">def</span> <span class="nf">setPhoto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">pixmap</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pixmap</span><span class="o">.</span><span class="n">isNull</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDragMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">ScrollHandDrag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDragMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">NoDrag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitInView</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PhotoViewer.wheelEvent"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.wheelEvent">[docs]</a>    <span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasPhoto</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">angleDelta</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">1.25</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;1 :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.8</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;2 :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">factor</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;3 :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitInView</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;4 :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;5 :&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_zoom</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhotoViewer.toggleDragMode"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.toggleDragMode">[docs]</a>    <span class="k">def</span> <span class="nf">toggleDragMode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dragMode</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">ScrollHandDrag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDragMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">NoDrag</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="o">.</span><span class="n">pixmap</span><span class="p">()</span><span class="o">.</span><span class="n">isNull</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDragMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="o">.</span><span class="n">ScrollHandDrag</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhotoViewer.mousePressEvent"><a class="viewcode-back" href="../../../../test2.html#Sphinx.pySphinx.src.graphics.PhotoViewer.mousePressEvent">[docs]</a>    <span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_photo</span><span class="o">.</span><span class="n">isUnderMouse</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">photoClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPoint</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">()))</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PhotoViewer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QDesktopWidget</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">graphics</span> <span class="o">=</span> <span class="n">Graphics</span><span class="p">()</span>
+    <span class="n">graphics</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">screenGeometry</span><span class="p">()</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">screenGeometry</span><span class="p">()</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+    <span class="n">graphics</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1">#graphics.sidebar.thumbnail.setPhoto(QtGui.QPixmap(&#39;side.jpg&#39;))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Hojin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

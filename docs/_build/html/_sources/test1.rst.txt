@@ -9,5 +9,15 @@ DNN_basic
 ---------
 .. automodule:: test1.test
     :members:
+    :undoc-members:
+    :show-inheritance:
+
+Sphinx_LiveTest
+---------------
+.. note::
+    This is note.
+
+.. automodule:: test1.Sphinx_LiveTest
+    :members:
 
 
